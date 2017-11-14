@@ -19,6 +19,8 @@ import os
 import time
 import json
 import random
+import datetime,time
+
 
 
 import argparse
@@ -580,7 +582,7 @@ class JDWrapper(object):
 			'promoID':'0',
 			'outSkus': '',
 			'random': random.random(),
-			'locationId':'1-72-2799-0',  # need changed to your area location id
+			'locationId':'22_2103_2105_0',  # need changed to your area location id
 		}
 
 		try:
@@ -697,15 +699,28 @@ class JDWrapper(object):
 
 		return False
 
+def sleep_some_time(hour,minute,second):
+    curTime = datetime.datetime.now()
+    desTime = curTime.replace(hour=int(hour), minute=int(minute), second=int(second), microsecond=0)
+    delta = desTime - curTime
+    sleeptime = delta.total_seconds()
+    while True:
+        print("the software will be executed at %s ，there are  %d second left" % (desTime,sleeptime))
+        sleeptime = sleeptime -5
+        if sleeptime < 5:
+            break
+        time.sleep(5)
+    print('start time：%s' %datetime.time())
 
 def main(options):
 	# 
 	jd = JDWrapper()
 	if not jd.login_by_QR():
 		return
-
-	while not jd.buy(options) and options.flush:
-		time.sleep(options.wait / 1000.0)
+	sleep_some_time(15,45,50)
+	for i in range(options.loopnum):
+		while not jd.buy(options) and options.flush:
+			time.sleep(options.wait / 1000.0)
 
 
 if __name__ == '__main__':
@@ -716,31 +731,35 @@ if __name__ == '__main__':
 	#parser.add_argument('-p', '--password', 
 	#					help='Jing Dong login user password', default='')
 	parser.add_argument('-a', '--area', 
-						help='Area string, like: 1_72_2799_0 for Beijing', default='1_72_2799_0')	
+						help='Area string, like: 1_72_2799_0 for Beijing', default='22_2103_2105_0')
 	parser.add_argument('-g', '--good', 
 						help='Jing Dong good ID', default='')
-	parser.add_argument('-c', '--count', type=int, 
+	parser.add_argument('-c', '--count', type=int,
 						help='The count to buy', default=1)
 	parser.add_argument('-w', '--wait', 
 						type=int, default=500,
 						help='Flush time interval, unit MS')
-	parser.add_argument('-f', '--flush', 
+	parser.add_argument('-f', '--flush',
+						default=True,
 						action='store_true', 
 						help='Continue flash if good out of stock')
 	parser.add_argument('-s', '--submit', 
 						action='store_true',
+						default=True,
 						help='Submit the order to Jing Dong')
+	parser.add_argument('-l', '--loopnum', type=int,
+						help='The count to buy', default=2)
 				
 	# example goods
 	hw_watch = '2567304'
-	iphone_7 = '3133851'
+	good_id = '4993737'
 	
 	options = parser.parse_args()
 	print options
   
 	# for test
 	if options.good == '':
-		options.good = iphone_7
+		options.good = good_id
 	
 	'''
 	if options.password == '' or options.username == '':
