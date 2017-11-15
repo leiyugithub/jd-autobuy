@@ -717,7 +717,7 @@ def main(options):
 	jd = JDWrapper()
 	if not jd.login_by_QR():
 		return
-	sleep_some_time(15,45,50)
+	sleep_some_time(9,59,49)
 	for i in range(options.loopnum):
 		while not jd.buy(options) and options.flush:
 			time.sleep(options.wait / 1000.0)
