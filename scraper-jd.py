@@ -748,7 +748,7 @@ if __name__ == '__main__':
 						default=True,
 						help='Submit the order to Jing Dong')
 	parser.add_argument('-l', '--loopnum', type=int,
-						help='The count to buy', default=2)
+						help='The count to buy', default=10)
 				
 	# example goods
 	hw_watch = '2567304'
